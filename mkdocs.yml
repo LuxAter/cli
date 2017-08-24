@@ -4,14 +4,14 @@ extra:
   feature:
     tabs: true
   palette:
-    primary: 'blue'
-    accent: 'green'
+    primary: 'pink'
+    accent: 'blue'
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
 extra_css:
   - 'css/extra.css'
 google_analytics:
-  - 'ADD GOOGLE HERE'
+  - 'UA-104338919-3'
   - 'auto'
 markdown_extensions:
   - admonition
@@ -29,3 +29,9 @@ repo_name: 'Cli'
 repo_url: 'https://github.com/LuxAtrumStudio/Cli'
 pages:
   - 'Home': 'index.md'
+  - 'Tutorial':
+    - 'Home': 'tut/index.md'
+  - 'Reference':
+    - 'Home': 'ref/index.md'
+    - 'Any': 'ref/any.md'
+    - 'Parser': 'ref/parser.md'

@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
 export NAME= cli
-export LINK= -l
+export LINK=
 export INCLUDE=
 export TYPE= lib
 
