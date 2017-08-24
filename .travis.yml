@@ -27,9 +27,18 @@ script:
 after_success:
   - cd build
   - lcov --directory . --capture --output-file coverage.info
-  - lcov --remove coverage.info '/usr/*' '*/external/*' --output-file coverage.info
+  - lcov --remove coverage.info '/usr/*' '*/external/*' '*/test/*' --output-file coverage.info
   - lcov --list coverage.info
   - bash <(curl -s https://codecov.io/bash) || echo "CodeCov Error"
+  - mkdocs build --clean --strict
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: site
+  on:
+    branch: master
 
 notifications:
   email: false
