@@ -28,6 +28,8 @@ namespace cli {
     LIGHT_CYAN = 14,
     WHITE = 15
   };
+
+  // Cursor movement functions
   inline void MoveCursor(int x = 0, int y = 0) {
     if (x < 0) {
       printf("\033[%iD", abs(x));
@@ -41,6 +43,8 @@ namespace cli {
     }
   }
   inline void SetCursor(int x, int y) { printf("\033[%i;%iH", x, y); }
+
+  // Console/Line clearing functions
   inline void Clear(unsigned int method = CLEAR_ALL) {
     printf("\033[%iJ", method);
   }
@@ -48,6 +52,7 @@ namespace cli {
     printf("\033[%iK", method);
   }
 
+  // Attrubute functions
   inline std::string Reset(std::string str) {
     return "\033[0m" + str + "\033[0m";
   }
@@ -79,6 +84,7 @@ namespace cli {
     return "\033[9m" + str + "\033[29m";
   }
 
+  // Foreground color functions
   inline std::string Default(std::string str) {
     return "\033[39m" + str + "\033[39m";
   }
@@ -107,6 +113,7 @@ namespace cli {
     return "\033[37m" + str + "\033[39m";
   }
 
+  // Light foreground color functions
   inline std::string LightBlack(std::string str) {
     return "\033[90m" + str + "\033[39m";
   }
@@ -132,6 +139,7 @@ namespace cli {
     return "\033[97m" + str + "\033[39m";
   }
 
+  // Background color funcitons
   inline std::string DefaultBg(std::string str) {
     return "\033[49m" + str + "\033[49m";
   }
@@ -160,6 +168,7 @@ namespace cli {
     return "\033[47m" + str + "\033[49m";
   }
 
+  // Light background color functions
   inline std::string LightBlackBg(std::string str) {
     return "\033[100m" + str + "\033[49m";
   }
@@ -185,6 +194,7 @@ namespace cli {
     return "\033[107m" + str + "\033[49m";
   }
 
+  // All foreground color funcitons
   inline std::string Color(std::string str, unsigned int color) {
     switch (color) {
       case BLACK:
@@ -252,7 +262,33 @@ namespace cli {
     return "\033[38;2;" + std::to_string(red) + ';' + std::to_string(green) +
            ';' + std::to_string(blue) + 'm' + str + "\033[39m";
   }
+  inline std::string Color(std::string str, std::array<unsigned int, 3> color) {
+    return Color(str, color[0], color[1], color[2]);
+  }
+  inline std::string FColor(std::string str, double red, double green,
+                            double blue) {
+    if (red > 1.0f) {
+      red = 1.0f;
+    } else if (red < 0.0f) {
+      red = 0.0f;
+    }
+    if (green > 1.0f) {
+      green = 1.0f;
+    } else if (green < 0.0f) {
+      green = 0.0f;
+    }
+    if (blue > 1.0f) {
+      blue = 1.0f;
+    } else if (blue < 0.0f) {
+      blue = 0.0f;
+    }
+    return Color(str, (int)(255 * red), (int)(255 * green), (int)(255 * blue));
+  }
+  inline std::string FColor(std::string str, std::array<double, 3> color) {
+    return FColor(str, color[0], color[1], color[2]);
+  }
 
+  // All background color function
   inline std::string ColorBg(std::string str, unsigned int color) {
     switch (color) {
       case BLACK:
@@ -318,7 +354,62 @@ namespace cli {
       blue = 255;
     }
     return "\033[48;2;" + std::to_string(red) + ';' + std::to_string(green) +
-           ';' + std::to_string(blue) + 'm' + str + "\033[39m";
+           ';' + std::to_string(blue) + 'm' + str + "\033[49m";
+  }
+  inline std::string ColorBg(std::string str,
+                             std::array<unsigned int, 3> color) {
+    return ColorBg(str, color[0], color[1], color[2]);
+  }
+  inline std::string FColorBg(std::string str, double red, double green,
+                              double blue) {
+    if (red > 1.0f) {
+      red = 1.0f;
+    } else if (red < 0.0f) {
+      red = 0.0f;
+    }
+    if (green > 1.0f) {
+      green = 1.0f;
+    } else if (green < 0.0f) {
+      green = 0.0f;
+    }
+    if (blue > 1.0f) {
+      blue = 1.0f;
+    } else if (blue < 0.0f) {
+      blue = 0.0f;
+    }
+    return ColorBg(str, (int)(255 * red), (int)(255 * green),
+                   (int)(255 * blue));
+  }
+  inline std::string FColorBg(std::string str, std::array<double, 3> color) {
+    return FColorBg(str, color[0], color[1], color[2]);
+  }
+
+  // All foreground and background color funcitons
+  inline std::string Color(std::string str, unsigned int color_fg,
+                           unsigned int color_bg) {
+    return Color(ColorBg(str, color_bg), color_fg);
+  }
+
+  inline std::string Color(std::string str, unsigned int red_fg,
+                           unsigned int green_fg, unsigned int blue_fg,
+                           unsigned int red_bg, unsigned int green_bg,
+                           unsigned int blue_bg) {
+    return Color(ColorBg(str, red_bg, green_bg, blue_bg), red_fg, green_fg,
+                 blue_fg);
+  }
+  inline std::string Color(std::string str, std::array<unsigned int, 3> fg,
+                           std::array<unsigned int, 3> bg) {
+    return Color(ColorBg(str, bg), fg);
+  }
+  inline std::string FColor(std::string str, double red_fg, double green_fg,
+                            double blue_fg, double red_bg, double green_bg,
+                            double blue_bg) {
+    return FColor(FColorBg(str, red_bg, green_bg, blue_bg), red_fg, green_fg,
+                  blue_fg);
+  }
+  inline std::string FColor(std::string str, std::array<double, 3> fg,
+                            std::array<double, 3> bg) {
+    return FColor(FColorBg(str, bg), fg);
   }
 
 }  // namespace cli

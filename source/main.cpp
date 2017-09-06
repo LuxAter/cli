@@ -1,4 +1,4 @@
-#include "cursor.hpp"
+#include "console.hpp"
 
 #include <iostream>
 
@@ -10,6 +10,12 @@ int main() {
   std::cout << cli::Color("Hello World", cli::LIGHT_GREEN) << "\n";
   std::cout << cli::ColorBg("Hello World", cli::RED) << "\n";
   std::cout << cli::ColorBg("Hello World", 255, 127, 126) << "\n";
+  std::cout << cli::Color("Hello World", {255, 127, 126}) << "\n";
+  std::cout << cli::Color("Hello World", cli::RED, cli::BLUE) << "\n";
+  std::cout << cli::Color("Hello World", 255, 127, 126, 126, 127, 255) << "\n";
+  std::cout << cli::FColor("Hello World", 1.0, 0.7, 0.2) << "\n";
+  std::cout << cli::FColor("Hello World", {1.0, 0.7, 0.2}, {0.2, 0.7, 1.0})
+            << "\n";
 
   // int b = 0;
   // for (int r = 0; r < 255; r += 2) {
