@@ -1,6 +1,8 @@
 #ifndef CLI_CURSOR_HPP
 #define CLI_CURSOR_HPP
 
+#include <math.h>
+
 namespace cli {
   enum ClearMethods {
     CLEAR_END = 0,

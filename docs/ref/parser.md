@@ -195,6 +195,6 @@ argument group.
 
 | Parameters |                                 |
 |------------|---------------------------------|
-| `group`    | string specifing group to count |
+| `group`    | string specifying group to count |
 
 **Return Value:** `size_t` count of arguments in specified group.
