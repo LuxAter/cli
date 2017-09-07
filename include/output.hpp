@@ -43,6 +43,8 @@ namespace cli {
     }
   }
   inline void SetCursor(int x, int y) { printf("\033[%i;%iH", x, y); }
+  inline void SaveCursor() { printf("\033[s"); }
+  inline void RestoreCursor() { printf("\033[u"); }
 
   // Console/Line clearing functions
   inline void Clear(unsigned int method = CLEAR_ALL) {
