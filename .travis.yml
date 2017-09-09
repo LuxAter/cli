@@ -19,6 +19,7 @@ before_install:
 install:
   - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
+  - pip install mkdocs mkdocs-material pygments pymdown-extensions
 
 script:
   - make
