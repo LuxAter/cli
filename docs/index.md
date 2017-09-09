@@ -25,9 +25,15 @@ functionalities are included, through including the associated header file.
 
 The different modules included are:
 
-* [`any_type.hpp`](ref/any.md): A class that can be used to represent
+* [`any.hpp`](ref/any.md): A class that can be used to represent
     most basic types including `bool`, `int`, `double`, `float`, `char`, `const
     char*`, and `std::string`.
+* [`cursor.hpp`](ref/cursor.md): A set of functions used to move the cursor
+    around and clear the terminal window and line.
+* [`output.hpp`](ref/output.md): A set of functions for fine control over the
+    output of the terminal (e.g. Colors and attributes).
 * [`parser.hpp`](ref/parser.md): A class that can be used to read and parse the
     input arguments provided by the command line (**Note:** [`Any`](ref/any.md)
     is required).
+* [`terminal.hpp`](ref/terminal.md): A set of functions used to control the
+    terminal system. Enabling/Disabling buffering or echo.

@@ -6,13 +6,13 @@ Any is a class that is used for representation of many of the different basic
 data types. The `Any` class can represent `bool`, `int`, `double`, `float`,
 `char`, `const char*`, and `std::string`.
 
-Inorder to use this class, include `any_type.hpp`.
+In order to use this class, include `any_type.hpp`.
 
-### Member Enums ###
+### Member Enum ###
 
 |                       |                                          |
 |-----------------------|------------------------------------------|
-| [`AnyType`](#anytype) | Enumerator specifing type that is stored |
+| [`AnyType`](#anytype) | Enumerator specifying type that is stored |
 
 ### Member Variables ###
 
@@ -43,11 +43,11 @@ Inorder to use this class, include `any_type.hpp`.
 |                                       |                                     |
 |---------------------------------------|-------------------------------------|
 | [`operator<<`](#operator_1)      | prints value of the class to stream |
-| [`operator==`](#operator_2) | compairs two Any type variables     |
+| [`operator==`](#operator_2) | compares two Any type variables     |
 
 ---
 
-## Enums ##
+## Enum ##
 
 ### AnyType ###
 
@@ -64,7 +64,7 @@ enum AnyType {
 };
 ```
 
-The types that are used to destinguish the variable type that is stored in the
+The types that are used to distinguish the variable type that is stored in the
 class.
 
 ## Variables ##
@@ -75,7 +75,7 @@ class.
 unsigned int type = NONE;
 ```
 
-Varible that is used to store the variable type from [`AnyType`](#anytype) that
+Variable that is used to store the variable type from [`AnyType`](#anytype) that
 is represented by the class.
 
 ## Functions ##
@@ -95,12 +95,12 @@ explicit Any(std::string v);
 ```
 
 Constructs a new Any object from any of the given values. This value can be
-retreaved later using one of the [Access Functions](#member-functions).
+retrieved later using one of the [Access Functions](#member-functions).
 
 | Parameters |                                               |
 |------------|-----------------------------------------------|
-| *copy*     | another Any object to clone                   |
-| *v*        | any data type to set for the Any object value |
+| `copy`     | another Any object to clone                   |
+| `v`        | any data type to set for the Any object value |
 
 ### (destructor) ###
 
@@ -122,13 +122,13 @@ Any& operator=(const char* v);
 Any& operator=(std::string v);
 ```
 
-Sets the value and type to the corisponding entered value.
+Sets the value and type to the corresponding entered value.
 
 #### Parameters ####
 
 |     |                                               |
 |-----|-----------------------------------------------|
-| *v* | any data type to set for the Any object value |
+| `v` | any data type to set for the Any object value |
 
 **Return Value:** `*this`
 
@@ -206,7 +206,7 @@ Prints value stored by object to ostream.
 bool operatpr==(const Any& lhs, const Any& rhs);
 ```
 
-Compairs values stored in Any objects, and returns `true` if they are the same.
+Compares values stored in Any objects, and returns `true` if they are the same.
 
 **Return Value:** `bool` comparison of value stored in Any object.
 
