@@ -454,7 +454,7 @@ Sets the foreground and background color from 0-1 `red`, `green`, `blue` values.
 
 #### Base 16 Colors ####
 
-All of the folowing base 16 colors have the same set of functions;
+All of the following base 16 colors have the same set of functions;
 
 ```cpp
 inline Color();
@@ -467,7 +467,7 @@ inline LightColorBg();
 inline LightColorBg(std::string str);
 ```
 
-with color replaced with the respective color names. The set of posible color
+With color replaced with the respective color names. The set of possible color
 names are:
 
 |         |  |
@@ -485,18 +485,18 @@ names are:
 
 *Note:* `Default` only has definitions for `[1]`, `[2]`, `[5]`, and `[6]`.
 
-*Note:* The light varient of `Grey` does not exist, insted use `White`.
+*Note:* The light variant of `Grey` does not exist, instead use `White`.
 
 These functions do the following;
 
 * Set the foreground color.
 * Set the foreground color only for `str`.
-* Set the foreground color to the light varient.
-* Set the foreground color to the light varient only for `str`.
+* Set the foreground color to the light variant.
+* Set the foreground color to the light variant only for `str`.
 * Set the background color.
 * Set the background color only for `str`.
-* Set the background color to the light varient.
-* Set the background color to the light varient only for `str`.
+* Set the background color to the light variant.
+* Set the background color to the light variant only for `str`.
 
 | Parameter |                              |
 |-----------|------------------------------|

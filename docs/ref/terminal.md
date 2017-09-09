@@ -22,7 +22,7 @@
 inline void SaveBuffer();
 ```
 
-Saves the buffer and buffer settings internaly, so that it may be restored
+Saves the buffer and buffer settings internally, so that it may be restored
 later with [`RestoreBuffer`](#restorebuffer).
 
 ### RestoreBuffer ###
@@ -74,7 +74,7 @@ inline void GetSize(int& col, int& row);
 ```
 
 Gets the size of the terminal in columns and rows, and returns the values
-throught the input parameters.
+thought the input parameters.
 
 | Parameter |                                       |
 |-----------|---------------------------------------|

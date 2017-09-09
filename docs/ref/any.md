@@ -8,7 +8,7 @@ data types. The `Any` class can represent `bool`, `int`, `double`, `float`,
 
 In order to use this class, include `any_type.hpp`.
 
-### Member Enums ###
+### Member Enum ###
 
 |                       |                                          |
 |-----------------------|------------------------------------------|
@@ -47,7 +47,7 @@ In order to use this class, include `any_type.hpp`.
 
 ---
 
-## Enums ##
+## Enum ##
 
 ### AnyType ###
 
@@ -99,8 +99,8 @@ retrieved later using one of the [Access Functions](#member-functions).
 
 | Parameters |                                               |
 |------------|-----------------------------------------------|
-| *copy*     | another Any object to clone                   |
-| *v*        | any data type to set for the Any object value |
+| `copy`     | another Any object to clone                   |
+| `v`        | any data type to set for the Any object value |
 
 ### (destructor) ###
 
@@ -128,7 +128,7 @@ Sets the value and type to the corresponding entered value.
 
 |     |                                               |
 |-----|-----------------------------------------------|
-| *v* | any data type to set for the Any object value |
+| `v` | any data type to set for the Any object value |
 
 **Return Value:** `*this`
 
