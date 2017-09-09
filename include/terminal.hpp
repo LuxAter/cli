@@ -41,7 +41,7 @@ namespace cli {
     tcsetattr(0, TCSANOW, &t);
   }
 
-  inline void GetSize(int col, int row) {
+  inline void GetSize(int& col, int& row) {
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
     col = w.ws_col;

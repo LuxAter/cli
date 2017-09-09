@@ -37,3 +37,4 @@ pages:
     - 'Cursor': 'ref/cursor.md'
     - 'Output': 'ref/output.md'
     - 'Parser': 'ref/parser.md'
+    - 'Terminal': 'ref/terminal.md'
