@@ -17,13 +17,17 @@ before_install:
   - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
   - sudo apt-get update -qq
 install:
+  - pip install mkdocs
+  - pip install mkdocs-material
+  - pip install pygments
+  - pip install pymdown-extensions
   - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
-  - pip install mkdocs mkdocs-material pygments pymdown-extensions
 
 script:
   - make
   - ./unit-test
+  - mkdocs build --clean --strict
 
 after_success:
   - cd build
@@ -31,7 +35,7 @@ after_success:
   - lcov --remove coverage.info '/usr/*' '*/external/*' '*/test/*' --output-file coverage.info
   - lcov --list coverage.info
   - bash <(curl -s https://codecov.io/bash) || echo "CodeCov Error"
-  - mkdocs build --clean --strict
+  - cd ../
 
 deploy:
   provider: pages
