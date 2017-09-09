@@ -34,4 +34,7 @@ pages:
   - 'Reference':
     - 'Home': 'ref/index.md'
     - 'Any': 'ref/any.md'
+    - 'Cursor': 'ref/cursor.md'
+    - 'Output': 'ref/output.md'
     - 'Parser': 'ref/parser.md'
+    - 'Terminal': 'ref/terminal.md'
