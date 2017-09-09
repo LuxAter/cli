@@ -112,10 +112,10 @@ namespace cli {
   inline std::string Cyan(std::string str) {
     return "\033[36m" + str + "\033[39m";
   }
+  inline std::string Grey() { return "\033[37m"; }
   inline std::string Grey(std::string str) {
     return "\033[37m" + str + "\033[39m";
   }
-  inline std::string Grey() { return "\033[37m"; }
 
   // Light foreground color functions
   inline std::string LightBlack() { return "\033[90m"; }
@@ -224,7 +224,7 @@ namespace cli {
   }
 
   // All foreground color funcitons
-  inline std::string Color(unsigned int color) {
+  inline std::string ColorFg(unsigned int color) {
     std::string str;
     switch (color) {
       case BLACK:
@@ -278,7 +278,7 @@ namespace cli {
     }
     return str;
   }
-  inline std::string Color(std::string str, unsigned int color) {
+  inline std::string ColorFg(std::string str, unsigned int color) {
     switch (color) {
       case BLACK:
         str = Black(str);
@@ -331,8 +331,8 @@ namespace cli {
     }
     return str;
   }
-  inline std::string Color(unsigned int red, unsigned int green,
-                           unsigned int blue) {
+  inline std::string ColorFg(unsigned int red, unsigned int green,
+                             unsigned int blue) {
     if (red > 255) {
       red = 255;
     }
@@ -345,8 +345,8 @@ namespace cli {
     return "\033[38;2;" + std::to_string(red) + ';' + std::to_string(green) +
            ';' + std::to_string(blue) + 'm';
   }
-  inline std::string Color(std::string str, unsigned int red,
-                           unsigned int green, unsigned int blue) {
+  inline std::string ColorFg(std::string str, unsigned int red,
+                             unsigned int green, unsigned int blue) {
     if (red > 255) {
       red = 255;
     }
@@ -359,13 +359,14 @@ namespace cli {
     return "\033[38;2;" + std::to_string(red) + ';' + std::to_string(green) +
            ';' + std::to_string(blue) + 'm' + str + "\033[39m";
   }
-  inline std::string Color(std::array<unsigned int, 3> color) {
+  inline std::string ColorFg(std::array<unsigned int, 3> color) {
     return Color(color[0], color[1], color[2]);
   }
-  inline std::string Color(std::string str, std::array<unsigned int, 3> color) {
+  inline std::string ColorFg(std::string str,
+                             std::array<unsigned int, 3> color) {
     return Color(str, color[0], color[1], color[2]);
   }
-  inline std::string FColor(double red, double green, double blue) {
+  inline std::string FColorFg(double red, double green, double blue) {
     if (red > 1.0f) {
       red = 1.0f;
     } else if (red < 0.0f) {
@@ -383,8 +384,8 @@ namespace cli {
     }
     return Color((int)(255 * red), (int)(255 * green), (int)(255 * blue));
   }
-  inline std::string FColor(std::string str, double red, double green,
-                            double blue) {
+  inline std::string FColorFg(std::string str, double red, double green,
+                              double blue) {
     if (red > 1.0f) {
       red = 1.0f;
     } else if (red < 0.0f) {
@@ -402,10 +403,10 @@ namespace cli {
     }
     return Color(str, (int)(255 * red), (int)(255 * green), (int)(255 * blue));
   }
-  inline std::string FColor(std::array<double, 3> color) {
+  inline std::string FColorFg(std::array<double, 3> color) {
     return FColor(color[0], color[1], color[2]);
   }
-  inline std::string FColor(std::string str, std::array<double, 3> color) {
+  inline std::string FColorFg(std::string str, std::array<double, 3> color) {
     return FColor(str, color[0], color[1], color[2]);
   }
 
