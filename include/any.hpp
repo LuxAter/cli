@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include <time.h>
+
 namespace cli {
   class Any {
     enum AnyType {
@@ -14,7 +16,8 @@ namespace cli {
       FLOAT = 4,
       CHAR = 5,
       CCHAR = 6,
-      STRING = 7
+      STRING = 7,
+      TIME = 8
     };
 
    public:
@@ -27,7 +30,8 @@ namespace cli {
           float_(copy.float_),
           cchar_(copy.cchar_),
           char_(copy.char_),
-          string_(copy.string_) {}
+          string_(copy.string_),
+          time_(copy.time_) {}
     explicit Any(bool v) : type(BOOL), bool_(v) {}
     explicit Any(int v) : type(INT), int_(v) {}
     explicit Any(double v) : type(DOUBLE), double_(v) {}
@@ -35,6 +39,7 @@ namespace cli {
     explicit Any(char v) : type(CHAR), char_(v) {}
     explicit Any(const char* v) : type(CCHAR), cchar_(v) {}
     explicit Any(std::string v) : type(STRING), string_(v) {}
+    explicit Any(struct tm v) : type(TIME), time_(v) {}
 
     ~Any() {}
 
@@ -66,6 +71,10 @@ namespace cli {
       type = STRING;
       string_ = v;
     }
+    void operator=(struct tm v) {
+      type = TIME;
+      time_ = v;
+    }
 
     bool Bool() const { return bool_; }
     int Int() const { return int_; }
@@ -74,6 +83,9 @@ namespace cli {
     const char* Cchar() const { return cchar_; }
     char Char() const { return char_; }
     std::string String() const { return string_; }
+    struct tm Time() const {
+      return time_;
+    }
 
     operator bool() { return bool_; }
     operator int() { return int_; }
@@ -82,6 +94,7 @@ namespace cli {
     operator const char*() { return cchar_; }
     operator char() { return char_; }
     operator std::string() { return string_; }
+    operator struct tm() { return time_; }
 
     friend std::ostream& operator<<(std::ostream& out, const Any& v) {
       switch (v.type) {
@@ -106,6 +119,11 @@ namespace cli {
         case STRING:
           out << v.String();
           break;
+        case TIME: {
+          struct tm c = v.Time();
+          out << asctime(&c);
+          break;
+        }
         default:
           out << "(null)";
           break;
@@ -133,6 +151,9 @@ namespace cli {
           return lhs.Cchar() == rhs.Cchar();
         } else if (lhs.type == STRING) {
           return lhs.String() == rhs.String();
+        } else if (lhs.type == TIME) {
+          struct tm lhs_tm = lhs.Time(), rhs_tm = rhs.Time();
+          return mktime(&lhs_tm) == mktime(&rhs_tm);
         } else {
           return false;
         }
@@ -149,6 +170,7 @@ namespace cli {
     const char* cchar_ = "";
     char char_ = char();
     std::string string_ = std::string();
+    struct tm time_;
   };
 }
 
