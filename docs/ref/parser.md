@@ -58,7 +58,27 @@ void AddArgument(std::vector<std::string> name, std::string dest,
 ```
 
 Adds a new argument to either the global arguments, or the current argument
-group.
+group. Arguments are also possible to be regular expressions, and any matched
+arguments that are not otherwise recognized will be used. The regular
+expression functionality if enabled through the use of the `action` parameter.
+
+The `action` parameter can be any of the following:
+
+| Parameter   | Action                                                      |
+|-------------|-------------------------------------------------------------|
+| `get_value` | Returns the next value provided in the command line         |
+| `set_true`  | Sets a true boolean if flag appears                         |
+| `set_false` | Sets a false boolean if flag appear                         |
+| `regex`     | Returns argument if argument matches regex provided in name |
+| `int`       | Returns argument if argument is an integer                  |
+| `double`    | Returns argument if argument is a floating integer          |
+| `char`      | Returns argument if argument is a character                 |
+| `string`    | Returns string of text contained within " or '              |
+| `time`      | Returns argument of format HH:MM[:SS]                       |
+| `date`      | Returns argument of format dd/mm[/yy[yy]]                   |
+| `date_time` | Returns argument of format dd/mm[/yy[yy]]THH:MM[:SS]        |
+
+*Note:* the `[]` indicate optional formatting, which can be omitted.
 
 | Parameters      |                                                |
 |-----------------|------------------------------------------------|
