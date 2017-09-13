@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <regex>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -134,11 +135,11 @@ namespace cli {
       for (size_t i = 1; i < args.size() && special == false; i++) {
         Argument arg = find_argument(args[i]);
         if (arg.true_argument_ == false) {
-          if (print_ == true) {
+          if (print_ == true && throw_flags_ == true) {
             std::cout << "Unknown argument \"" << args[i] << "\"!\n";
           }
         } else if (arg.valid() == false) {
-          if (print_ == true) {
+          if (print_ == true && throw_flags_ == true) {
             std::cout << "Invalid Argument (no name or destination)!\n";
           }
         }
@@ -146,13 +147,19 @@ namespace cli {
           if (args.size() > i + 1) {
             i += 1;
             values[arg.dest] = set_value(args[i]);
-          } else if (print_ == true) {
+          } else if (print_ == true && throw_flags_ == true) {
             std::cout << "Failed to provide value for argument!\n";
           }
         } else if (arg.action == "set_true") {
           values[arg.dest] = true;
         } else if (arg.action == "set_false") {
           values[arg.dest] = false;
+        } else if (arg.action == "regex") {
+          values[arg.dest] = args[i];
+        } else if (arg.action == "int") {
+          values[arg.dest] = stoi(args[i]);
+        } else if (arg.action == "double") {
+          values[arg.dest] = stod(args[i]);
         }
       }
       return values;
@@ -296,14 +303,15 @@ namespace cli {
       }
     }
 
+    void SetThrowFlags(bool setting) { throw_flags_ = setting; }
+
    private:
     bool is_action(std::string str) {
       bool action = false;
-      if (str == "get_value") {
-        action = true;
-      } else if (str == "set_true") {
-        action = true;
-      } else if (str == "set_false") {
+      if (str == "get_value" || str == "set_true" || str == "set_false" ||
+          str == "regex" || str == "int" || str == "double" || str == "char" ||
+          str == "string" || str == "time" || str == "date" ||
+          str == "date_time") {
         action = true;
       }
       return action;
@@ -342,6 +350,8 @@ namespace cli {
         for (size_t i = 0; i < it->name.size(); i++) {
           if (it->name[i] == str) {
             return *it;
+          } else if (CheckRegex(str, it->name[i], it->action) == true) {
+            return *it;
           }
         }
         for (std::map<std::string, std::vector<Argument>>::iterator it =
@@ -352,6 +362,9 @@ namespace cli {
             for (size_t i = 0; i < sub_it->name.size(); i++) {
               if (sub_it->name[i] == str) {
                 return *sub_it;
+              } else if (CheckRegex(str, sub_it->name[i], sub_it->action) ==
+                         true) {
+                return *sub_it;
               }
             }
           }
@@ -360,9 +373,20 @@ namespace cli {
       return return_argument;
     }
 
+    bool CheckRegex(std::string match, std::string regex, std::string action) {
+      if (action == "regex") {
+        return std::regex_match(match, std::regex(regex));
+      } else if (action == "int") {
+        return std::regex_match(match, std::regex("(\\+|-)?[[:digit:]]+"));
+      } else if (action == "double") {
+        return std::regex_match(
+            match, std::regex("(\\+|-)?[[:digit:]]*\\.[[:digit:]]+"));
+      }
+      return false;
+    }
+
     Any set_value(std::string str) {
       Any type;
-      // TODO(Arden): Add string extensions
       if (str == "false") {
         type = false;
       } else if (str == "true") {
@@ -395,6 +419,7 @@ namespace cli {
 
     bool help_usage_ = true;
     bool print_ = true;
+    bool throw_flags_ = true;
 
     std::string group_name_ = std::string();
     std::string help_header_ = "Help Page";
