@@ -160,6 +160,13 @@ namespace cli {
           values[arg.dest] = stoi(args[i]);
         } else if (arg.action == "double") {
           values[arg.dest] = stod(args[i]);
+        } else if (arg.action == "char") {
+          values[arg.dest] = args[i][0];
+        } else if (arg.action == "string") {
+          values[arg.dest] = args[i];
+        } else if (arg.action == "time" || arg.action == "date" ||
+                   arg.action == "date_time") {
+          values[arg.dest] = ParseDateTime(args[i], arg);
         }
       }
       return values;
@@ -381,6 +388,29 @@ namespace cli {
       } else if (action == "double") {
         return std::regex_match(
             match, std::regex("(\\+|-)?[[:digit:]]*\\.[[:digit:]]+"));
+      } else if (action == "char") {
+        return std::regex_match(match, std::regex("."));
+      } else if (action == "string") {
+        return std::regex_match(
+            match, std::regex("(\"[^\"]*\")|(\'[^\']*\')|([^\s]+)"));
+      } else if (action == "date") {
+        return std::regex_match(
+            match,
+            std::regex(
+                "(0?[1-9]|[12][0-9]|3[01])[-/\\.](0?[1-9]|1[012])([-/\\.]"
+                "([0-9]{4}|[0-9]{2}))?"));
+      } else if (action == "time") {
+        return std::regex_match(
+            match,
+            std::regex(
+                "([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5]?[0-9](:[0-5]?[0-9])?"));
+      } else if (action == "date_time") {
+        return std::regex_match(
+            match,
+            std::regex(
+                "((0?[1-9]|[12][0-9]|3[01])[-/\\.](0?[1-9]|1[012])([-/"
+                "\\.]([0-9]{4}|[0-9]{2}))?)T(([0-9]|0[0-9]|1[0-9]|2[0-3]):"
+                "([0-5]?[0-9])(:[0-5]?[0-9])?)"));
       }
       return false;
     }
@@ -413,6 +443,58 @@ namespace cli {
         }
       }
       return type;
+    }
+
+    struct tm ParseDateTime(std::string str, Argument arg) {
+      time_t current_time = time(NULL);
+      struct tm current_tm = *localtime(&current_time);
+      current_tm.tm_sec = 0;
+      current_tm.tm_min = 0;
+      current_tm.tm_hour = 0;
+      std::string time_str, date_str;
+      if (arg.action == "time") {
+        time_str = str;
+      } else if (arg.action == "date") {
+        date_str = str;
+      } else if (arg.action == "date_time") {
+        std::stringstream ss(str);
+        std::getline(ss, date_str, 'T');
+        std::getline(ss, time_str, 'T');
+        std::cout << time_str << ":" << date_str << "\n";
+      }
+      if (arg.action == "time" || arg.action == "date_time") {
+        strptime(time_str.c_str(), "%H:%M:%S", &current_tm);
+      }
+      if (arg.action == "date" || arg.action == "date_time") {
+        std::string divider = "-";
+        std::string year = "%y";
+        if (std::regex_match(date_str.c_str(),
+                             std::regex{"(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1["
+                                        "012])(/([0-9]{4}|[0-9]{2}))?"}) ==
+            true) {
+          divider = "/";
+        } else if (std::regex_match(
+                       date_str.c_str(),
+                       std::regex{"(0?[1-9]|[12][0-9]|3[01])\\.(0?[1-9]|1["
+                                  "012])(\\.([0-9]{4}|[0-9]{2}))?"}) == true) {
+          divider = ".";
+        }
+        if (std::regex_match(
+                date_str.c_str(),
+                std::regex{"(0?[1-9]|[12][0-9]|3[01])[-/\\.](0?[1-9]|1["
+                           "012])[-/\\.]([0-9]{4})"}) == true) {
+          year = "%Y";
+        } else if (std::regex_match(date_str.c_str(),
+                                    std::regex("(0?[1-9]|[12][0-9]|3[01])[-/"
+                                               "\\.](0?[1-9]|1[012])")) ==
+                   true) {
+          year = "";
+        }
+        std::string fmt = "%d" + divider + "%m" + divider + year;
+        std::cout << "\"" << fmt << "\"\n";
+        strptime(date_str.c_str(), fmt.c_str(), &current_tm);
+      }
+      return current_tm;
     }
 
     std::string exe_name_ = std::string();
