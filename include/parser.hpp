@@ -391,8 +391,7 @@ namespace cli {
       } else if (action == "char") {
         return std::regex_match(match, std::regex("."));
       } else if (action == "string") {
-        return std::regex_match(
-            match, std::regex("(\"[^\"]*\")|(\'[^\']*\')|([^\s]+)"));
+        return std::regex_match(match, std::regex(".+"));
       } else if (action == "date") {
         return std::regex_match(
             match,
