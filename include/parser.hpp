@@ -29,6 +29,7 @@ namespace cli {
       std::string action;
       Any default_value;
       bool true_argument_ = true;
+      bool used_ = false;
       bool valid() {
         if (name.size() == 0) {
           return false;
@@ -133,40 +134,42 @@ namespace cli {
         }
       }
       for (size_t i = 1; i < args.size() && special == false; i++) {
-        Argument arg = find_argument(args[i]);
-        if (arg.true_argument_ == false) {
+        Argument* arg = find_argument(args[i]);
+        if (arg == NULL) {
           if (print_ == true && throw_flags_ == true) {
             std::cout << "Unknown argument \"" << args[i] << "\"!\n";
           }
-        } else if (arg.valid() == false) {
+        } else if (arg->valid() == false) {
           if (print_ == true && throw_flags_ == true) {
             std::cout << "Invalid Argument (no name or destination)!\n";
           }
+        } else {
+          arg->used_ = true;
         }
-        if (arg.action == "get_value") {
+        if (arg->action == "get_value") {
           if (args.size() > i + 1) {
             i += 1;
-            values[arg.dest] = set_value(args[i]);
+            values[arg->dest] = set_value(args[i]);
           } else if (print_ == true && throw_flags_ == true) {
-            std::cout << "Failed to provide value for argument!\n";
+            std::cout << "Failed to provide value for arg->ment!\n";
           }
-        } else if (arg.action == "set_true") {
-          values[arg.dest] = true;
-        } else if (arg.action == "set_false") {
-          values[arg.dest] = false;
-        } else if (arg.action == "regex") {
-          values[arg.dest] = args[i];
-        } else if (arg.action == "int") {
-          values[arg.dest] = stoi(args[i]);
-        } else if (arg.action == "double") {
-          values[arg.dest] = stod(args[i]);
-        } else if (arg.action == "char") {
-          values[arg.dest] = args[i][0];
-        } else if (arg.action == "string") {
-          values[arg.dest] = args[i];
-        } else if (arg.action == "time" || arg.action == "date" ||
-                   arg.action == "date_time") {
-          values[arg.dest] = ParseDateTime(args[i], arg);
+        } else if (arg->action == "set_true") {
+          values[arg->dest] = true;
+        } else if (arg->action == "set_false") {
+          values[arg->dest] = false;
+        } else if (arg->action == "regex") {
+          values[arg->dest] = args[i];
+        } else if (arg->action == "int") {
+          values[arg->dest] = stoi(args[i]);
+        } else if (arg->action == "double") {
+          values[arg->dest] = stod(args[i]);
+        } else if (arg->action == "char") {
+          values[arg->dest] = args[i][0];
+        } else if (arg->action == "string") {
+          values[arg->dest] = args[i];
+        } else if (arg->action == "time" || arg->action == "date" ||
+                   arg->action == "date_time") {
+          values[arg->dest] = ParseDateTime(args[i], arg);
         }
       }
       return values;
@@ -349,16 +352,15 @@ namespace cli {
       return return_map;
     }
 
-    Argument find_argument(std::string str) {
-      Argument return_argument;
-      return_argument.true_argument_ = false;
+    Argument* find_argument(std::string str) {
       for (std::vector<Argument>::iterator it = arguments_.begin();
            it != arguments_.end(); ++it) {
         for (size_t i = 0; i < it->name.size(); i++) {
           if (it->name[i] == str) {
-            return *it;
-          } else if (CheckRegex(str, it->name[i], it->action) == true) {
-            return *it;
+            return &(*it);
+          } else if (CheckRegex(str, it->name[i], it->action) == true &&
+                     it->used_ == false) {
+            return &(*it);
           }
         }
         for (std::map<std::string, std::vector<Argument>>::iterator it =
@@ -368,16 +370,17 @@ namespace cli {
                sub_it != it->second.end(); ++sub_it) {
             for (size_t i = 0; i < sub_it->name.size(); i++) {
               if (sub_it->name[i] == str) {
-                return *sub_it;
+                return &(*sub_it);
               } else if (CheckRegex(str, sub_it->name[i], sub_it->action) ==
-                         true) {
-                return *sub_it;
+                             true &&
+                         sub_it->used_ == false) {
+                return &(*sub_it);
               }
             }
           }
         }
       }
-      return return_argument;
+      return NULL;
     }
 
     bool CheckRegex(std::string match, std::string regex, std::string action) {
@@ -444,27 +447,27 @@ namespace cli {
       return type;
     }
 
-    struct tm ParseDateTime(std::string str, Argument arg) {
+    struct tm ParseDateTime(std::string str, Argument* arg) {
       time_t current_time = time(NULL);
       struct tm current_tm = *localtime(&current_time);
       current_tm.tm_sec = 0;
       current_tm.tm_min = 0;
       current_tm.tm_hour = 0;
       std::string time_str, date_str;
-      if (arg.action == "time") {
+      if (arg->action == "time") {
         time_str = str;
-      } else if (arg.action == "date") {
+      } else if (arg->action == "date") {
         date_str = str;
-      } else if (arg.action == "date_time") {
+      } else if (arg->action == "date_time") {
         std::stringstream ss(str);
         std::getline(ss, date_str, 'T');
         std::getline(ss, time_str, 'T');
         std::cout << time_str << ":" << date_str << "\n";
       }
-      if (arg.action == "time" || arg.action == "date_time") {
+      if (arg->action == "time" || arg->action == "date_time") {
         strptime(time_str.c_str(), "%H:%M:%S", &current_tm);
       }
-      if (arg.action == "date" || arg.action == "date_time") {
+      if (arg->action == "date" || arg->action == "date_time") {
         std::string divider = "-";
         std::string year = "%y";
         if (std::regex_match(date_str.c_str(),
