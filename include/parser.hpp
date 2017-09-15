@@ -513,6 +513,9 @@ namespace cli {
     std::vector<Argument> arguments_;
     std::map<std::string, std::vector<Argument>> group_arguments_;
   };
+
+  std::string DateRegex(std::string) { return "(null)"; }
+
 }  // namespace cli
 
 #endif /* ifndef CLI_PARSER_HPP */
