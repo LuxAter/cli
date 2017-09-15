@@ -145,31 +145,31 @@ namespace cli {
           }
         } else {
           arg->used_ = true;
-        }
-        if (arg->action == "get_value") {
-          if (args.size() > i + 1) {
-            i += 1;
-            values[arg->dest] = set_value(args[i]);
-          } else if (print_ == true && throw_flags_ == true) {
-            std::cout << "Failed to provide value for arg->ment!\n";
+          if (arg->action == "get_value") {
+            if (args.size() > i + 1) {
+              i += 1;
+              values[arg->dest] = set_value(args[i]);
+            } else if (print_ == true && throw_flags_ == true) {
+              std::cout << "Failed to provide value for arg->ment!\n";
+            }
+          } else if (arg->action == "set_true") {
+            values[arg->dest] = true;
+          } else if (arg->action == "set_false") {
+            values[arg->dest] = false;
+          } else if (arg->action == "regex") {
+            values[arg->dest] = args[i];
+          } else if (arg->action == "int") {
+            values[arg->dest] = stoi(args[i]);
+          } else if (arg->action == "double") {
+            values[arg->dest] = stod(args[i]);
+          } else if (arg->action == "char") {
+            values[arg->dest] = args[i][0];
+          } else if (arg->action == "string") {
+            values[arg->dest] = args[i];
+          } else if (arg->action == "time" || arg->action == "date" ||
+                     arg->action == "date_time") {
+            values[arg->dest] = ParseDateTime(args[i], arg);
           }
-        } else if (arg->action == "set_true") {
-          values[arg->dest] = true;
-        } else if (arg->action == "set_false") {
-          values[arg->dest] = false;
-        } else if (arg->action == "regex") {
-          values[arg->dest] = args[i];
-        } else if (arg->action == "int") {
-          values[arg->dest] = stoi(args[i]);
-        } else if (arg->action == "double") {
-          values[arg->dest] = stod(args[i]);
-        } else if (arg->action == "char") {
-          values[arg->dest] = args[i][0];
-        } else if (arg->action == "string") {
-          values[arg->dest] = args[i];
-        } else if (arg->action == "time" || arg->action == "date" ||
-                   arg->action == "date_time") {
-          values[arg->dest] = ParseDateTime(args[i], arg);
         }
       }
       return values;
