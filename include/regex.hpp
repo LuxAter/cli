@@ -3,9 +3,21 @@
 
 #include <regex>
 
+#include <iostream>
+
 namespace cli {
   bool Regex(std::string str, std::string regex) {
-    return std::regex_match(str.c_str(), std::regex(regex.c_str()));
+    return std::regex_match(str, std::regex(regex));
+  }
+
+  std::vector<std::string> RegexFind(std::string str, std::string regex) {
+    std::vector<std::string> matches;
+    std::smatch match;
+    while (std::regex_search(str, match, std::regex(regex))) {
+      matches.push_back(match.str());
+      str = match.suffix();
+    }
+    return matches;
   }
 
   std::string IntRegex() { return "[\\+-]?[0-9]+"; }
@@ -62,7 +74,7 @@ namespace cli {
         } else if (fmt[i] == 'd') {
           regex += regex_pat["day"];
         } else if (fmt[i] == 'D') {
-          regex += regex_pat["month"] + "\/" + regex_pat["day"] + "\/" +
+          regex += regex_pat["month"] + "\\/" + regex_pat["day"] + "\\/" +
                    regex_pat["year_last"];
         } else if (fmt[i] == 'e') {
           regex += regex_pat["day"];
@@ -96,7 +108,7 @@ namespace cli {
         } else if (fmt[i] == 'u') {
           regex += regex_pat["day_week"];
         } else if (fmt[i] == 'x') {
-          regex += regex_pat["month"] + "\/" + regex_pat["day"] + "\/" +
+          regex += regex_pat["month"] + "\\/" + regex_pat["day"] + "\\/" +
                    regex_pat["year_last"];
         } else if (fmt[i] == 'X') {
           regex += regex_pat["hour_24"] + ":" + regex_pat["minute"] + ":" +

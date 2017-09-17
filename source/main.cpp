@@ -7,7 +7,7 @@
 
 #include <time.h>
 
-int main(int argc, const char* argv[]) {
+int main() {
   cli::Parser parser;
 
   time_t ctm = time(NULL);
@@ -15,7 +15,7 @@ int main(int argc, const char* argv[]) {
 
   std::vector<std::string> fmt = {"%a",       "%A", "%c",
                                   "%H:%M:%S", "%D", "%d/%m/%Y"};
-  for (int i = 0; i < fmt.size(); i++) {
+  for (int i = 0; i < (int)fmt.size(); i++) {
     char buffer[100];
     std::string regex = cli::GenerateDateRegex(fmt[i]);
     strftime(buffer, 100, fmt[i].c_str(), date);
@@ -28,6 +28,15 @@ int main(int argc, const char* argv[]) {
     std::cout << "<==";
     std::cout << regex;
     std::cout << "\n";
+  }
+
+  std::string regex_find =
+      "+Start +Flags Hello this is an example task +Middle with some project "
+      "flags +Testing fHello fTest fSup";
+  std::cout << "Matches:\n";
+  std::vector<std::string> results = cli::RegexFind(regex_find, "\\+[^\\s]+");
+  for (int i = 0; i < (int)results.size(); i++) {
+    std::cout << results[i] << "\n";
   }
 
   // std::string tm_str;
