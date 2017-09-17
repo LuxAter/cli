@@ -20,6 +20,11 @@ namespace cli {
     return matches;
   }
 
+  std::string RegexReplace(std::string str, std::string regex,
+                           std::string replace) {
+    return std::regex_replace(str, std::regex(regex), replace.c_str());
+  }
+
   std::string IntRegex() { return "[\\+-]?[0-9]+"; }
   std::string FloatRegex() { return "[\\+-]?[0-9]*\\.[0-9]+"; }
   std::string CharRegex() { return "."; }
