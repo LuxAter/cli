@@ -122,12 +122,8 @@ namespace cli {
           regex += regex_pat["year_last"];
         } else if (fmt[i] == 'Y') {
           regex += regex_pat["year"];
-        } else if (fmt[i] == '?') {
-          regex += "?";
-        } else if (fmt[i] == ']') {
-          regex += "]";
-        } else if (fmt[i] == '[') {
-          regex += "[";
+        } else {
+          regex += fmt[i];
         }
       } else {
         if (fmt[i] == '[' || fmt[i] == ']' || fmt[i] == '?' || fmt[i] == '(' ||
