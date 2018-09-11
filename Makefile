@@ -7,19 +7,18 @@ export TYPE= lib
 
 export SOURCE_DIR= source
 export TEST_DIR= test
-export EXTERNAL_DIR= external
+export EXTERNAL_DIR = external
 export BUILD_DIR= build
 export INCLUDE_DIR= include
+export DOC_DIR= docs
 
 export BASE_PATH=$(shell pwd)
 
-export COMPILER=g++
-export CXXFLAGS= -MMD -std=c++11 -w -c
+export IGNORE=-Wno-gnu-zero-variadic-macro-arguments -Wno-ignored-optimization-argument
+export COMPILER= clang++
+export CXXFLAGS= -MMD -std=c++17 -c -fPIC -Wall -Wextra -Wpedantic $(IGNORE)
 
 export INSTALL_PATH=/usr/local
-
-export GCOV_LINK = -lgcov --coverage
-export GCOV_FLAG = -fprofile-arcs -ftest-coverage
 
 export COMMON_INCLUDE=-I$(BASE_PATH)/$(INCLUDE_DIR) $(INCLUDE)
 
@@ -38,7 +37,7 @@ endif
 
 define print_section
 str="$(1)";\
-    line_length=$${#str};\
+    line_length=$$(expr length "$$str");\
     printf "%b%s\n" "$(SECTION_COLOR)" "$$str";\
     while [ $$line_length -gt 0 ]; do\
       printf "=";\
@@ -59,14 +58,14 @@ endef
 all: external source test
 
 .PHONY : clean
-clean: clean-external clean-source clean-test
+clean: clean-source clean-test
 
 .PHONY : install
 install: source root-access install-source
 	if [ $(TYPE) == "lib" ] && ! [ -d "$(INSTALL_PATH)/include/$(NAME)" ]; then \
 	  $(call print,Installing include directory,$(INSTALL_COLOR));\
 	  sudo mkdir $(INSTALL_PATH)/include/ -p;\
-	  sudo cp $(INCLUDE_DIR)/ $(INSTALL_PATH)/include/$(NAME)/ -r;\
+	  sudo cp $(INCLUDE_DIR)/ $(INSTALL_PATH)/include/ -r;\
 	fi
 
 .PHONY : uninstall
@@ -82,6 +81,8 @@ help:
 	printf "List of all acceptable make targets\n\n"
 	$(call help,all,Builds external, source, and test files and projects)
 	$(call help,clean,Clean files created from external, source, and test)
+	$(call help,install,Installs include directories and libraries)
+	$(call help,uninstall,Removes installed include directores and libraries)
 	$(call help,help,Display this help page)
 	$(call help,external,Builds external files and projects)
 	$(call help,clean-external,Cleans files created from external)
@@ -89,6 +90,9 @@ help:
 	$(call help,clean-source,Cleans files created from source)
 	$(call help,test,Builds test files and projects)
 	$(call help,clean-test,Cleans files created from test)
+	$(call help,docs,Compiles documentation)
+	$(call help,clean-docs,Cleans files created from docs)
+	$(call help,runtest,Compiles and runs unit tests)
 
 .PHONY : root-access
 root-access:
@@ -123,11 +127,35 @@ uninstall-source:
 	$(call print_section,Source Files)
 	if [ -d "$(SOURCE_DIR)" ]; then cd "$(SOURCE_DIR)" && $(MAKE) uninstall; fi
 
+
 .PHONY : test
 test:
 	$(call print_section,Unit Tests)
 	if [ -d "$(TEST_DIR)" ]; then cd "$(TEST_DIR)" && $(MAKE); fi
+
 .PHONY : clean-test
 clean-test:
 	$(call print_section,Unit Tests)
 	if [ -d "$(TEST_DIR)" ]; then cd "$(TEST_DIR)" && $(MAKE) clean; fi
+
+.PHONY : runtest
+runtest: test
+	find . -name "*.gcda" -delete
+	./unit-test --gtest_color=yes
+
+
+.PHONY: docs
+docs:
+	$(call print_section,Documentation)
+	
+	$(call print,Running doxygen...,$(COMPILE_COLOR))
+	doxygen
+	
+
+.PHONY: clean-docs
+clean-docs:
+	$(call print_section,Documentation)
+	if [ -d "$(DOC_DIR)/html" ]; then rm "$(DOC_DIR)/html" -r; fi
+	if [ -d "$(DOC_DIR)/latex" ]; then rm "$(DOC_DIR)/latex" -r; fi
+	if [ -d "$(DOC_DIR)/xml" ]; then rm "$(DOC_DIR)/xml" -r; fi
+	$(call print,Cleaned Documentation,$(CLEAN_COLOR))

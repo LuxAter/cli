@@ -3,5 +3,11 @@
 *.log
 *.swp
 build/*
+docs/html/*
+docs/latex/*
+docs/xml/*
 cli
 unit-test
+.gdb_history
+coverage/*
+core

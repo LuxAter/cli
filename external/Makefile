@@ -10,7 +10,8 @@ endef
 all: gtest
 
 .PHONY : clean
-clean: gtest_clean
+clean: 
+
 
 GTEST_ALL = $(BASE_PATH)/$(BUILD_DIR)/gtest/gtest-all.o
 GTEST_MAIN = $(BASE_PATH)/$(BUILD_DIR)/gtest/gtests_main.o
