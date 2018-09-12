@@ -6,7 +6,8 @@
 
 int main(int argc, char *argv[])
 {
-  std::string word = cli::PromptSuggest("User:", {"Arden", "Tristan", "Grace", "Genie", "Alec", "Sean", "Ryan"}, cli::P_ECHO);
+  cli::Prompt("Test", cli::P_ECHO);
+  std::string word = cli::PromptSuggest("User:", {"Arden", "Tristan", "Grace", "Genie", "Alec", "Sean", "Ryan"}, "", cli::GetColor("cyan"), cli::GetColor("yellow"), cli::P_ECHO);
   std::cout << ">>" << word << "<<\n";
   /* CODE */
   return 0;
