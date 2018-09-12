@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 export NAME= cli
 export LINK=
-export INCLUDE=
+export INCLUDE= -I$(BASE_PATH)/$(EXTERNAL_DIR)/estl
 export TYPE= lib
 
 export SOURCE_DIR= source

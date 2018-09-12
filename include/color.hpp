@@ -68,17 +68,6 @@ namespace cli {
     }
     return "";
   }
-  // std::string GetColor(uint8_t r, uint8_t g, uint8_t b,
-  //                      bool background = false) {
-  //   uint8_t support = ColorSupport();
-  //   if (support == 0) {
-  //     return "";
-  //   } else {
-  //     return (background ? "\033[48;2;" : "\033[38;2;") + std::to_string(r) +
-  //            ';' + std::to_string(g) + ';' + std::to_string(b) + 'm';
-  //   }
-  //   return "";
-  // }
   std::string GetColor(double r, double g, double b, bool background = false) {
     uint8_t support = ColorSupport();
     if (support == 0) {
@@ -101,10 +90,10 @@ namespace cli {
     return "";
   }
 
-  std::string Color(std::string src, std::string fg, std::string bg = "") {
+  std::string Color(const std::string& src, const std::string& fg, std::string bg = "") {
     return GetColor(fg) + GetColor(bg, true) + src + "\033[39;49m";
   }
-  std::string Color(std::string src, double fg_r, double fg_g, double fg_b,
+  std::string Color(const std::string& src, double fg_r, double fg_g, double fg_b,
                     double bg_r = -1, double bg_g = -1, double bg_b = -1) {
     return GetColor(fg_r, fg_g, fg_b) + GetColor(bg_r, bg_g, bg_b, true) + src +
            "\033[39;49m";

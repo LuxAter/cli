@@ -78,8 +78,8 @@ lib_start:
 
 $(EXE): exe_start $(LIB) $(EXE_OBJ)
 	$(call print,Linking $(shell basename $(EXE)),$(LINK_COLOR))
-	if [ -e "$(LIB)" ]; then $(COMPILER) $(EXE_OBJ) $(LIB) $(LINK) $(GCOV_LINK) -o $(EXE); fi
-	if [ ! -e "$(LIB)" ]; then $(COMPILER) $(EXE_OBJ) $(LINK) $(GCOV_LINK) -o $(EXE); fi
+	if [ -e "$(LIB)" ]; then $(COMPILER) $(EXE_OBJ) $(LIB) $(LINK) $(COMMON_INCLUDE) $(GCOV_LINK) -o $(EXE); fi
+	if [ ! -e "$(LIB)" ]; then $(COMPILER) $(EXE_OBJ) $(LINK) $(COMMON_INCLUDE) $(GCOV_LINK) -o $(EXE); fi
 
 .PHONY : exe_start
 exe_start:
